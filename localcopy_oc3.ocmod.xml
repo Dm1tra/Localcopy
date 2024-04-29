@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Localcopy OCMOD for OpenCart 3</name>
+    <code>localcopy-ocmod-opencart-oc3</code>
+    <version>1.0.0</version>
+    <author>Arthur SUPPORTS.BY</author>
+    <link>https://supports.by/</link>
+   <file path="admin/controller/marketplace/install.php">
+  <operation>
+    <search>
+      <![CDATA[if ($safe) {]]>
+    </search>
+    <add position="before">
+      <![CDATA[
+        // Ensure safe mode is always on
+        $safe = true;
+        // Log state change
+        error_log('Safe mode set to true during OCMOD installation.');
+      ]]>
+    </add>
+  </operation>
+  <operation>
+    <search>
+      <![CDATA[if (is_dir($file) && !is_dir($path)) {]]>
+    </search>
+    <add position="before">
+      <![CDATA[
+        // Handle empty path and set it to the correct application root
+        if ($path === '') {
+          $app_root = dirname(DIR_APPLICATION);
+          $path = $app_root . '/' . trim($destination, '/');
+          // Log path setup
+          error_log("Path set to: $path");
+        }
+      ]]>
+    </add>
+  </operation>
+</file>
+</modification>
